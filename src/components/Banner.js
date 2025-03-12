@@ -57,7 +57,11 @@ export const Banner = () => {
               <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
                 <span className="tagline">Welcome to my Portfolio</span>
                 <h1>{`Hello! I'm Harshraj`} <span className="txt-rotate" dataPeriod="1000" data-rotate='[ "-Web Developer", "-Java Programmer", "-SDE" ]'><span className="wrap">{text}</span></span></h1>
-                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                  <p>I’m Harshrajsinh Zala, a web developer from Ahmedabad, currently pursuing BTech in CSE at VIT Vellore.</p>
+                  <p>I love building cool web apps, optimizing databases, and solving real-world problems with code.</p>
+                    <p>Always up for collabs in full-stack dev, AI/ML, and open-source projects while exploring React, Next.js, and system design.</p>
+                    <p>Ask me about web dev, databases, or project deployment—or how to split a bill with code!😂 </p> 
+                   <p>Fun fact: I’ve closed my IDE more times than my browser tabs. 🚀</p>
                   <button onClick={() => console.log('connect')}>Let’s Connect <ArrowRightCircle size={25} /></button>
               </div>}
             </TrackVisibility>
