@@ -14,5 +14,7 @@ services:
         sync: false
       - key: EMAIL_PASSWORD
         sync: false
+      - key: ALLOWED_ORIGINS
+        value: "http://localhost:3000,https://harshrajsinh.vercel.app,https://portfolio-design-harshraj.vercel.app,https://portfolio-design-git-main-harshrajs-projects.vercel.app,https://portfolio-design.vercel.app"
       - key: FRONTEND_URL
         value: https://harshrajsinh.vercel.app 

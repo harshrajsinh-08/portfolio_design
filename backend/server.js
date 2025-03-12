@@ -8,21 +8,34 @@ const app = express();
 // CORS configuration
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://harshrajsinh.vercel.app', // Add your frontend URL here
-  process.env.FRONTEND_URL // Flexible frontend URL from env
+  'https://harshrajsinh.vercel.app',
+  'https://portfolio-design-harshraj.vercel.app',
+  'https://portfolio-design-git-main-harshrajs-projects.vercel.app',
+  'https://portfolio-design.vercel.app'
 ];
 
+// CORS middleware with detailed error handling
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    if (!origin) {
+      console.log('Request with no origin');
+      return callback(null, true);
     }
+
+    console.log('Request from origin:', origin);
+
+    if (allowedOrigins.indexOf(origin) === -1) {
+      console.log('Origin not allowed:', origin);
+      return callback(new Error('CORS not allowed'));
+    }
+
+    console.log('Origin allowed:', origin);
     return callback(null, true);
   },
-  credentials: true
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());

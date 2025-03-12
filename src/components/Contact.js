@@ -29,27 +29,40 @@ export const Contact = () => {
     e.preventDefault();
     setButtonText("Sending...");
     try {
+      console.log('Sending request to:', BACKEND_URL);
       const response = await fetch(`${BACKEND_URL}/api/contact`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json;charset=utf-8",
+          "Content-Type": "application/json",
+          "Accept": "application/json"
         },
         body: JSON.stringify(formDetails),
+        mode: 'cors',
+        credentials: 'include'
       });
       
+      console.log('Response status:', response.status);
       const result = await response.json();
+      console.log('Response data:', result);
       
       setFormDetails(formInitialDetails);
       if (response.ok) {
         setStatus({ success: true, message: result.message });
       } else {
-        setStatus({ success: false, message: result.message || "Something went wrong. Please try again later." });
+        setStatus({ 
+          success: false, 
+          message: result.message || "Server error. Please try again later." 
+        });
       }
     } catch (error) {
-      console.error("Error:", error);
-      setStatus({ success: false, message: "Network error. Please check your connection and try again." });
+      console.error("Error details:", error);
+      setStatus({ 
+        success: false, 
+        message: "Network error. Please check your connection and try again." 
+      });
+    } finally {
+      setButtonText("Send");
     }
-    setButtonText("Send");
   };
 
   return (
