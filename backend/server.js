@@ -5,8 +5,26 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://harshrajsinh.vercel.app', // Add your frontend URL here
+  process.env.FRONTEND_URL // Flexible frontend URL from env
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Create email transporter
@@ -16,6 +34,11 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASSWORD
   }
+});
+
+// Basic health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
 
 // Verify email configuration on startup

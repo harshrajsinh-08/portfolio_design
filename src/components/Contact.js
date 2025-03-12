@@ -4,6 +4,8 @@ import contactImg from "../assets/img/contact-img.svg";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001';
+
 export const Contact = () => {
   const formInitialDetails = {
     firstName: '',
@@ -27,7 +29,7 @@ export const Contact = () => {
     e.preventDefault();
     setButtonText("Sending...");
     try {
-      const response = await fetch("http://localhost:5001/api/contact", {
+      const response = await fetch(`${BACKEND_URL}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
