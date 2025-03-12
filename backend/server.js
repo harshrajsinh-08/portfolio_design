@@ -68,51 +68,70 @@ transporter.verify((error, success) => {
   }
 });
 
-// Contact form endpoint
-app.post('/api/contact', async (req, res) => {
+// Validation middleware
+const validateContactForm = (req, res, next) => {
   const { firstName, lastName, email, phone, message } = req.body;
-  
-  // Input validation
-  if (!firstName || !lastName || !email || !phone || !message) {
-    return res.status(400).json({ message: 'All fields are required' });
+  const errors = {};
+
+  // First Name validation
+  if (!firstName || firstName.length < 2 || !/^[A-Za-z\s]+$/.test(firstName)) {
+    errors.firstName = 'First name must be at least 2 characters long and contain only letters';
   }
 
-  // Basic email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ message: 'Invalid email format' });
+  // Last Name validation
+  if (!lastName || lastName.length < 2 || !/^[A-Za-z\s]+$/.test(lastName)) {
+    errors.lastName = 'Last name must be at least 2 characters long and contain only letters';
   }
-  
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    errors.email = 'Please enter a valid email address';
+  }
+
+  // Phone validation
+  const phoneRegex = /^[\d\s\-\(\)\+]+$/;
+  if (!phone || phone.replace(/[\s\-\(\)\+]/g, '').length < 10 || !phoneRegex.test(phone)) {
+    errors.phone = 'Please enter a valid phone number (minimum 10 digits)';
+  }
+
+  // Message validation
+  if (!message || message.length < 10 || message.length > 1000) {
+    errors.message = 'Message must be between 10 and 1000 characters';
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({ success: false, errors });
+  }
+
+  next();
+};
+
+// Update the contact route to use validation middleware
+app.post('/api/contact', validateContactForm, async (req, res) => {
   try {
-    // Email content
+    const { firstName, lastName, email, phone, message } = req.body;
+    
+    // Create mail options with sanitized input
     const mailOptions = {
-      from: process.env.EMAIL,
-      to: process.env.EMAIL,
-      subject: `New Contact Form Submission from ${firstName} ${lastName}`,
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: `Contact Form Submission from ${firstName} ${lastName}`,
       html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333;">New Contact Form Submission</h2>
-          <div style="background-color: #f5f5f5; padding: 20px; border-radius: 5px;">
-            <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Message:</strong></p>
-            <p style="background-color: white; padding: 15px; border-radius: 5px;">${message}</p>
-          </div>
-        </div>
+        <h3>New Contact Form Submission</h3>
+        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
       `
     };
 
-    // Send email
     await transporter.sendMail(mailOptions);
-    
-    res.status(200).json({ message: 'Message sent successfully!' });
+    res.status(200).json({ success: true, message: 'Message sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    res.status(500).json({ 
-      message: 'Error sending message. Please try again.',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    res.status(500).json({ success: false, message: 'Failed to send message', error: error.message });
   }
 });
 

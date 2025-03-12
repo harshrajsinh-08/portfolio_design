@@ -543,6 +543,51 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
   width: 100%;
 }
 
+/* Form Validation Styles */
+.contact form input.error,
+.contact form textarea.error {
+  border-color: #ff4444;
+  background: rgba(255, 68, 68, 0.05);
+}
+
+.contact form .error-message {
+  color: #ff4444;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.contact form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.contact form button:disabled:hover::before {
+  width: 0;
+}
+
+/* Status Message Styles */
+.contact form .success {
+  color: #4BB543;
+  font-size: 14px;
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(75, 181, 67, 0.1);
+  border-radius: 5px;
+  text-align: center;
+}
+
+.contact form .danger {
+  color: #ff4444;
+  font-size: 14px;
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(255, 68, 68, 0.1);
+  border-radius: 5px;
+  text-align: center;
+}
+
 /************ Footer Css ************/
 .footer {
   padding: 0 0 50px 0;
