@@ -106,7 +106,6 @@ export const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate all fields before submission
     if (!validateForm()) {
       setStatus({
         success: false,
@@ -126,7 +125,7 @@ export const Contact = () => {
         },
         body: JSON.stringify(formDetails),
         mode: 'cors',
-        credentials: 'include'
+        credentials: 'omit'
       });
       
       console.log('Response status:', response.status);

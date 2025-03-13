@@ -16,26 +16,20 @@ const allowedOrigins = [
 
 // CORS middleware with detailed error handling
 app.use(cors({
-  origin: function (origin, callback) {
+  origin: function(origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) {
-      console.log('Request with no origin');
-      return callback(null, true);
-    }
-
-    console.log('Request from origin:', origin);
-
+    if (!origin) return callback(null, true);
+    
     if (allowedOrigins.indexOf(origin) === -1) {
-      console.log('Origin not allowed:', origin);
-      return callback(new Error('CORS not allowed'));
+      console.log('Blocked origin:', origin);
+      return callback(null, false);
     }
-
-    console.log('Origin allowed:', origin);
+    console.log('Allowed origin:', origin);
     return callback(null, true);
   },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true,
-  optionsSuccessStatus: 200
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Accept'],
+  credentials: false
 }));
 
 app.use(express.json());
