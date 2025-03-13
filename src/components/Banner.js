@@ -11,10 +11,18 @@ export const Banner = () => {
   const [text, setText] = useState('');
   const [delta, setDelta] = useState(100 - Math.random() * 40);
   const [index, setIndex] = useState(1);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const toRotate = [ "  -Web Developer", "   -Java Programmer", "  -SDE","  -Full Stack Developer",];
   const period = 300;
 
   useEffect(() => {
+    // Check if animation has played before
+    const hasPlayed = localStorage.getItem('bannerAnimated');
+    if (hasPlayed) {
+      setHasAnimated(true);
+      return;
+    }
+
     let ticker = setInterval(() => {
       tick();
     }, delta);
@@ -47,31 +55,46 @@ export const Banner = () => {
     }
   }
 
+  const handleVisibilityChange = (isVisible) => {
+    if (isVisible && !hasAnimated) {
+      localStorage.setItem('bannerAnimated', 'true');
+      setHasAnimated(true);
+    }
+  };
+
   return (
     <section className="banner" id="home">
       <Container>
         <Row className="align-items-center">
           <Col xs={12} md={6} xl={7}>
             <TrackVisibility>
-              {({ isVisible }) =>
-              <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
-                <span className="tagline">Welcome to my Portfolio</span>
-                <h1>{`Hello! I'm Harshraj`} <span className="txt-rotate" dataPeriod="1000" data-rotate='[ "-Web Developer", "-Java Programmer", "-SDE" ]'><span className="wrap">{text}</span></span></h1>
-                  <p>I’m Harshrajsinh Zala, a web developer from Ahmedabad, currently pursuing BTech in CSE at VIT Vellore.</p>
-                  <p>I love building cool web apps, optimizing databases, and solving real-world problems with code.</p>
+              {({ isVisible }) => {
+                handleVisibilityChange(isVisible);
+                return (
+                  <div className={isVisible && !hasAnimated ? "animate__animated animate__fadeIn" : ""}>
+                    <span className="tagline">Welcome to my Portfolio</span>
+                    <h1>{`Hello! I'm Harshraj`} <span className="txt-rotate" dataPeriod="1000" data-rotate='[ "-Web Developer", "-Java Programmer", "-SDE" ]'><span className="wrap">{text}</span></span></h1>
+                    <p>I'm Harshrajsinh Zala, a web developer from Ahmedabad, currently pursuing BTech in CSE at VIT Vellore.</p>
+                    <p>I love building cool web apps, optimizing databases, and solving real-world problems with code.</p>
                     <p>Always up for collabs in full-stack dev, AI/ML, and open-source projects while exploring React, Next.js, and system design.</p>
                     <p>Ask me about web dev, databases, or project deployment—or how to split a bill with code!😂 </p> 
-                   <p>Fun fact: I’ve closed my IDE more times than my browser tabs. 🚀</p>
-                  <button onClick={() => console.log('connect')}>Let’s Connect <ArrowRightCircle size={25} /></button>
-              </div>}
+                    <p>Fun fact: I've closed my IDE more times than my browser tabs. 🚀</p>
+                    <button onClick={() => console.log('connect')}>Let's Connect <ArrowRightCircle size={25} /></button>
+                  </div>
+                );
+              }}
             </TrackVisibility>
           </Col>
           <Col xs={12} md={6} xl={5}>
             <TrackVisibility>
-              {({ isVisible }) =>
-                <div className={isVisible ? "animate__animated animate__zoomIn" : ""}>
-                  <img src={headerImg} alt="Header Img"/>
-                </div>}
+              {({ isVisible }) => {
+                handleVisibilityChange(isVisible);
+                return (
+                  <div className={isVisible && !hasAnimated ? "animate__animated animate__zoomIn" : ""}>
+                    <img src={headerImg} alt="Header Img"/>
+                  </div>
+                );
+              }}
             </TrackVisibility>
           </Col>
         </Row>

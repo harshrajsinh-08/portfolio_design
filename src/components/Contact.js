@@ -1,10 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import contactImg from "../assets/img/contact-img.svg";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
 
 export const Contact = () => {
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    // Check if animation has played before
+    const hasPlayed = localStorage.getItem('contactAnimated');
+    if (hasPlayed) {
+      setHasAnimated(true);
+      return;
+    }
+  }, []);
+
+  const handleVisibilityChange = (isVisible) => {
+    if (isVisible && !hasAnimated) {
+      localStorage.setItem('contactAnimated', 'true');
+      setHasAnimated(true);
+    }
+  };
+
   const formInitialDetails = {
     firstName: '',
     lastName: '',
@@ -162,86 +180,93 @@ export const Contact = () => {
         <Row className="align-items-center">
           <Col size={12} md={6}>
             <TrackVisibility partialVisibility once>
-              {({ isVisible }) =>
-                <img className={isVisible ? "animate__animated animate__zoomIn" : ""} src={contactImg} alt="Contact Us"/>
-              }
+              {({ isVisible }) => {
+                handleVisibilityChange(isVisible);
+                return (
+                  <img className={isVisible && !hasAnimated ? "animate__animated animate__zoomIn" : ""} src={contactImg} alt="Contact Us"/>
+                );
+              }}
             </TrackVisibility>
           </Col>
           <Col size={12} md={6}>
             <TrackVisibility partialVisibility once>
-              {({ isVisible }) =>
-                <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
-                <h2>Get In Touch</h2>
-                <form onSubmit={handleSubmit}>
-                  <Row>
-                    <Col size={12} sm={6} className="px-1">
-                      <input 
-                        type="text" 
-                        value={formDetails.firstName} 
-                        placeholder="First Name" 
-                        onChange={(e) => onFormUpdate('firstName', e.target.value)}
-                        className={formErrors.firstName ? 'error' : ''}
-                        required 
-                      />
-                      {formErrors.firstName && <div className="error-message">{formErrors.firstName}</div>}
-                    </Col>
-                    <Col size={12} sm={6} className="px-1">
-                      <input 
-                        type="text" 
-                        value={formDetails.lastName} 
-                        placeholder="Last Name" 
-                        onChange={(e) => onFormUpdate('lastName', e.target.value)}
-                        className={formErrors.lastName ? 'error' : ''}
-                        required 
-                      />
-                      {formErrors.lastName && <div className="error-message">{formErrors.lastName}</div>}
-                    </Col>
-                    <Col size={12} sm={6} className="px-1">
-                      <input 
-                        type="email" 
-                        value={formDetails.email} 
-                        placeholder="Email Address" 
-                        onChange={(e) => onFormUpdate('email', e.target.value)}
-                        className={formErrors.email ? 'error' : ''}
-                        required 
-                      />
-                      {formErrors.email && <div className="error-message">{formErrors.email}</div>}
-                    </Col>
-                    <Col size={12} sm={6} className="px-1">
-                      <input 
-                        type="tel" 
-                        value={formDetails.phone} 
-                        placeholder="Phone No." 
-                        onChange={(e) => onFormUpdate('phone', e.target.value)}
-                        className={formErrors.phone ? 'error' : ''}
-                        required 
-                      />
-                      {formErrors.phone && <div className="error-message">{formErrors.phone}</div>}
-                    </Col>
-                    <Col size={12} className="px-1">
-                      <textarea 
-                        rows="6" 
-                        value={formDetails.message} 
-                        placeholder="Message" 
-                        onChange={(e) => onFormUpdate('message', e.target.value)}
-                        className={formErrors.message ? 'error' : ''}
-                        required
-                      ></textarea>
-                      {formErrors.message && <div className="error-message">{formErrors.message}</div>}
-                      <button type="submit" disabled={Object.keys(formErrors).some(key => formErrors[key])}>
-                        <span>{buttonText}</span>
-                      </button>
-                    </Col>
-                    {status.message && (
-                      <Col>
-                        <div className={status.success === false ? "danger" : "success"}>
-                          {status.message}
-                        </div>
-                      </Col>
-                    )}
-                  </Row>
-                </form>
-              </div>}
+              {({ isVisible }) => {
+                handleVisibilityChange(isVisible);
+                return (
+                  <div className={isVisible && !hasAnimated ? "animate__animated animate__fadeIn" : ""}>
+                    <h2>Get In Touch</h2>
+                    <form onSubmit={handleSubmit}>
+                      <Row>
+                        <Col size={12} sm={6} className="px-1">
+                          <input 
+                            type="text" 
+                            value={formDetails.firstName} 
+                            placeholder="First Name" 
+                            onChange={(e) => onFormUpdate('firstName', e.target.value)}
+                            className={formErrors.firstName ? 'error' : ''}
+                            required 
+                          />
+                          {formErrors.firstName && <div className="error-message">{formErrors.firstName}</div>}
+                        </Col>
+                        <Col size={12} sm={6} className="px-1">
+                          <input 
+                            type="text" 
+                            value={formDetails.lastName} 
+                            placeholder="Last Name" 
+                            onChange={(e) => onFormUpdate('lastName', e.target.value)}
+                            className={formErrors.lastName ? 'error' : ''}
+                            required 
+                          />
+                          {formErrors.lastName && <div className="error-message">{formErrors.lastName}</div>}
+                        </Col>
+                        <Col size={12} sm={6} className="px-1">
+                          <input 
+                            type="email" 
+                            value={formDetails.email} 
+                            placeholder="Email Address" 
+                            onChange={(e) => onFormUpdate('email', e.target.value)}
+                            className={formErrors.email ? 'error' : ''}
+                            required 
+                          />
+                          {formErrors.email && <div className="error-message">{formErrors.email}</div>}
+                        </Col>
+                        <Col size={12} sm={6} className="px-1">
+                          <input 
+                            type="tel" 
+                            value={formDetails.phone} 
+                            placeholder="Phone No." 
+                            onChange={(e) => onFormUpdate('phone', e.target.value)}
+                            className={formErrors.phone ? 'error' : ''}
+                            required 
+                          />
+                          {formErrors.phone && <div className="error-message">{formErrors.phone}</div>}
+                        </Col>
+                        <Col size={12} className="px-1">
+                          <textarea 
+                            rows="6" 
+                            value={formDetails.message} 
+                            placeholder="Message" 
+                            onChange={(e) => onFormUpdate('message', e.target.value)}
+                            className={formErrors.message ? 'error' : ''}
+                            required
+                          ></textarea>
+                          {formErrors.message && <div className="error-message">{formErrors.message}</div>}
+                          <button type="submit" disabled={Object.keys(formErrors).some(key => formErrors[key])}>
+                            <span>{buttonText}</span>
+                          </button>
+                        </Col>
+                        {status.message && (
+                          <Col>
+                            <div className={status.success === false ? "danger" : "success"}>
+                              {status.message}
+                            </div>
+                          </Col>
+                        )}
+                      </Row>
+                    </form>
+                  </div>
+                );
+              }}
             </TrackVisibility>
           </Col>
         </Row>
