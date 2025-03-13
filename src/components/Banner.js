@@ -78,13 +78,12 @@ export const Banner = () => {
                 handleVisibilityChange(isVisible);
                 return (
                   <div className={isVisible && !hasAnimated ? "animate__animated animate__fadeIn" : ""}>
-                    <span className="tagline">Welcome to my Portfolio</span>
-                    <h1>{`Hello! I'm Harshraj`} <span className="txt-rotate" dataPeriod="1000" data-rotate='[ "-Web Developer", "-Java Programmer", "-SDE" ]'><span className="wrap">{text}</span></span></h1>
-                    <p>Hey, I'm Harshrajsinh Zala—a web dev who debugs more than he codes! 😆</p>
-<p>Building cool web apps, optimizing databases, and making tech do my bidding. Always up for full-stack, AI/ML, and open-source collabs!</p>
-<p>Ask me about web dev, databases,or why my IDE crashes more than my WiFi.🚀</p>
-<p>Fun fact: I’ve closed my IDE more times than my browser tabs! 😂</p>  
-<button onClick={() => console.log('connect')}>Let's Connect <ArrowRightCircle size={25} /></button>
+                  <span className="tagline">Welcome to my Portfolio</span>
+                  <h1>{`Hello! I'm Harshraj`} <span className="txt-rotate" dataPeriod="1000" data-rotate='[ "-Web Developer", "-Java Programmer", "-SDE" ]'><span className="wrap">{text}</span></span></h1>
+                  <p>Hey, I'm Harshrajsinh Zala—a web dev who debugs more than he codes! 😆</p>
+                  <p>Building cool web apps, optimizing databases, and making tech do my bidding. Always up for full-stack, AI/ML, and open-source collabs!</p>
+                  <p>Ask me about web dev, databases, or why my IDE crashes more than my WiFi.🚀</p>
+                  <p>Fun fact: I’ve closed my IDE more times than my browser tabs! 😂</p>
                   </div>
                 );
               }}
