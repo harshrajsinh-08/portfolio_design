@@ -12,17 +12,10 @@ export const Banner = () => {
   const [delta, setDelta] = useState(100 - Math.random() * 40);
   const [index, setIndex] = useState(1);
   const [hasAnimated, setHasAnimated] = useState(false);
-  const toRotate = [ "  -Web Developer", "   -Java Programmer", "  -SDE","  -Full Stack Developer",];
-  const period = 300;
+  const toRotate = [ "  -Web Developer", "   -Java Programmer", "  -SDE     ","  -Full Stack Developer",];
+  const period = 100;
 
   useEffect(() => {
-    // Check if animation has played before
-    const hasPlayed = localStorage.getItem('bannerAnimated');
-    if (hasPlayed) {
-      setHasAnimated(true);
-      return;
-    }
-
     let ticker = setInterval(() => {
       tick();
     }, delta);
