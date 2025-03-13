@@ -9,10 +9,23 @@ export const Banner = () => {
   const [loopNum, setLoopNum] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [text, setText] = useState('');
-  const [delta, setDelta] = useState(100 - Math.random() * 40);
+  const [delta, setDelta] = useState(80 - Math.random() * 40);
   const [index, setIndex] = useState(1);
   const [hasAnimated, setHasAnimated] = useState(false);
-  const toRotate = [ "  -Web Developer", "   -Java Programmer", "  -SDE     ","  -Full Stack Developer",];
+  const toRotate = [
+    "  -Web Developer",  
+    "  -Java Programmer",  
+    "  -Full Stack Developer",  
+    "  -Problem Solver",  
+    "  -Professional Debugger (90% of my job)",  
+    "  -Code Whisperer",  
+    "  -Stack Overflow Researcher",  
+    "  -404: Sleep Not Found",  
+    "  -Bug Exterminator",  
+    "  -Syntax Error Generator",  
+    "  -Keyboard Athlete",  
+    "  -Coffee-Powered Engineer"  
+  ];
   const period = 100;
 
   useEffect(() => {
@@ -31,13 +44,13 @@ export const Banner = () => {
     setText(updatedText);
 
     if (isDeleting) {
-      setDelta(prevDelta => prevDelta/2);
+      setDelta(prevDelta => Math.max(prevDelta/1.5, 50));
     }
 
     if (!isDeleting && updatedText === fullText) {
       setIsDeleting(true);
       setIndex(prevIndex => prevIndex - 1);
-      setDelta(1000);
+      setDelta(500);
     } else if (isDeleting && updatedText === '') {
       setIsDeleting(false);
       setLoopNum(loopNum + 1);
@@ -67,12 +80,11 @@ export const Banner = () => {
                   <div className={isVisible && !hasAnimated ? "animate__animated animate__fadeIn" : ""}>
                     <span className="tagline">Welcome to my Portfolio</span>
                     <h1>{`Hello! I'm Harshraj`} <span className="txt-rotate" dataPeriod="1000" data-rotate='[ "-Web Developer", "-Java Programmer", "-SDE" ]'><span className="wrap">{text}</span></span></h1>
-                    <p>I'm Harshrajsinh Zala, a web developer from Ahmedabad, currently pursuing BTech in CSE at VIT Vellore.</p>
-                    <p>I love building cool web apps, optimizing databases, and solving real-world problems with code.</p>
-                    <p>Always up for collabs in full-stack dev, AI/ML, and open-source projects while exploring React, Next.js, and system design.</p>
-                    <p>Ask me about web dev, databases, or project deployment—or how to split a bill with code!😂 </p> 
-                    <p>Fun fact: I've closed my IDE more times than my browser tabs. 🚀</p>
-                    <button onClick={() => console.log('connect')}>Let's Connect <ArrowRightCircle size={25} /></button>
+                    <p>Hey, I'm Harshrajsinh Zala—a web dev who debugs more than he codes! 😆</p>
+<p>Building cool web apps, optimizing databases, and making tech do my bidding. Always up for full-stack, AI/ML, and open-source collabs!</p>
+<p>Ask me about web dev, databases,or why my IDE crashes more than my WiFi.🚀</p>
+<p>Fun fact: I’ve closed my IDE more times than my browser tabs! 😂</p>  
+<button onClick={() => console.log('connect')}>Let's Connect <ArrowRightCircle size={25} /></button>
                   </div>
                 );
               }}
