@@ -12,7 +12,6 @@ export const Projects = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    // Check if animation has played before
     const hasPlayed = localStorage.getItem('projectsAnimated');
     if (hasPlayed) {
       setHasAnimated(true);

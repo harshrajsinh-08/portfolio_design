@@ -5,7 +5,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import colorSharp from "../assets/img/color-sharp.png"
 import TrackVisibility from 'react-on-screen';
-import './skills.css';  // We'll create this CSS file next
+import './skills.css'; 
 
 // Technology logos
 import javaLogo from "../assets/img/skills/java.svg";
@@ -22,7 +22,6 @@ export const Skills = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    // Check if animation has played before
     const hasPlayed = localStorage.getItem('skillsAnimated');
     if (hasPlayed) {
       setHasAnimated(true);
