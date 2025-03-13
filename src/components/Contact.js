@@ -117,6 +117,8 @@ export const Contact = () => {
     setButtonText("Sending...");
     try {
       console.log('Sending request to:', BACKEND_URL);
+      console.log('Form details:', formDetails);
+      
       const response = await fetch(`${BACKEND_URL}/api/contact`, {
         method: "POST",
         headers: {
@@ -135,12 +137,20 @@ export const Contact = () => {
       if (response.ok) {
         setFormDetails(formInitialDetails);
         setFormErrors(formInitialErrors);
-        setStatus({ success: true, message: result.message });
-      } else {
         setStatus({ 
-          success: false, 
-          message: result.message || "Server error. Please try again later." 
+          success: true, 
+          message: "Thank you for your message. I'll get back to you soon!" 
         });
+      } else {
+        let errorMessage = "Failed to send message. ";
+        if (result.errors) {
+          errorMessage += Object.values(result.errors).join(". ");
+        } else if (result.message) {
+          errorMessage += result.message;
+        } else {
+          errorMessage += "Please try again later.";
+        }
+        setStatus({ success: false, message: errorMessage });
       }
     } catch (error) {
       console.error("Error details:", error);

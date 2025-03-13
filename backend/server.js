@@ -38,8 +38,8 @@ app.use(express.json());
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASSWORD
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
@@ -52,6 +52,10 @@ app.get('/health', (req, res) => {
 transporter.verify((error, success) => {
   if (error) {
     console.error('Email configuration error:', error);
+    console.log('Environment variables:', {
+      EMAIL_USER: process.env.EMAIL_USER ? 'Set' : 'Not set',
+      EMAIL_PASS: process.env.EMAIL_PASS ? 'Set' : 'Not set'
+    });
     console.log('Please check your Gmail credentials in .env file');
     console.log('Make sure you have:');
     console.log('1. Enabled 2-Step Verification in your Google Account');
@@ -106,6 +110,12 @@ app.post('/api/contact', validateContactForm, async (req, res) => {
   try {
     const { firstName, lastName, email, phone, message } = req.body;
     
+    console.log('Attempting to send email with details:', {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: `Contact Form Submission from ${firstName} ${lastName}`
+    });
+    
     // Create mail options with sanitized input
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -121,11 +131,21 @@ app.post('/api/contact', validateContactForm, async (req, res) => {
       `
     };
 
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully:', info.response);
     res.status(200).json({ success: true, message: 'Message sent successfully' });
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ success: false, message: 'Failed to send message', error: error.message });
+    console.error('Detailed error sending email:', {
+      error: error.message,
+      stack: error.stack,
+      code: error.code,
+      command: error.command
+    });
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send message. Please try again later.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
