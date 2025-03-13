@@ -4,8 +4,6 @@ import contactImg from "../assets/img/contact-img.svg";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001';
-
 export const Contact = () => {
   const formInitialDetails = {
     firstName: '',
@@ -115,24 +113,24 @@ export const Contact = () => {
     }
 
     setButtonText("Sending...");
+    
     try {
-      console.log('Sending request to:', BACKEND_URL);
-      console.log('Form details:', formDetails);
-      
-      const response = await fetch(`${BACKEND_URL}/api/contact`, {
+      const response = await fetch("https://formspree.io/f/xdkeojyk", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        body: JSON.stringify(formDetails),
-        mode: 'cors',
-        credentials: 'omit'
+        body: JSON.stringify({
+          firstName: formDetails.firstName,
+          lastName: formDetails.lastName,
+          email: formDetails.email,
+          phone: formDetails.phone,
+          message: formDetails.message
+        })
       });
-      
-      console.log('Response status:', response.status);
+
       const result = await response.json();
-      console.log('Response data:', result);
       
       if (response.ok) {
         setFormDetails(formInitialDetails);
@@ -142,15 +140,10 @@ export const Contact = () => {
           message: "Thank you for your message. I'll get back to you soon!" 
         });
       } else {
-        let errorMessage = "Failed to send message. ";
-        if (result.errors) {
-          errorMessage += Object.values(result.errors).join(". ");
-        } else if (result.message) {
-          errorMessage += result.message;
-        } else {
-          errorMessage += "Please try again later.";
-        }
-        setStatus({ success: false, message: errorMessage });
+        setStatus({ 
+          success: false, 
+          message: result.error || "Something went wrong. Please try again later." 
+        });
       }
     } catch (error) {
       console.error("Error details:", error);
